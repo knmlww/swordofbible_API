@@ -1,25 +1,18 @@
 package com.example.holymbti_api.Controller;
 
 
-import com.example.holymbti_api.Domain.MBTI;
+import com.example.holymbti_api.Domain.MbtiIssue;
 import com.example.holymbti_api.Domain.MBTIDTO;
-import com.example.holymbti_api.Domain.MBTI_BASS;
 import com.example.holymbti_api.Service.APIService;
 import com.example.holymbti_api.Service.AwsS3Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriUtils;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 
 @RestController
@@ -43,7 +36,7 @@ public class APIcontroller {
     }
 
     @PostMapping(value="/holymbti/insertResult")
-    public MBTI insertResult(@RequestBody MBTI paramMBTI){
+    public MbtiIssue insertResult(@RequestBody MbtiIssue paramMBTI){
         return apiService.insertResult(paramMBTI);
     }
 
@@ -52,27 +45,9 @@ public class APIcontroller {
         return apiService.findMyMBTICount(paramMBTI.getMbtiResult());
     }
 
-    @GetMapping(value="/holymbti/searchResult/{search}")
-    public MBTIDTO searchResult(@PathVariable("search") int search){
-        MBTIDTO resultDTO = new MBTIDTO();
-        int issueId = search;
-
-        MBTI_BASS result = apiService.selectMBTI(issueId);
-
-        int mbtiCnt = apiService.findMyMBTICount(result.getTypeName());
-
-        resultDTO.setTypeName(result.getTypeName());
-        resultDTO.setTypeDtlName(result.getTypeDtlName());
-        resultDTO.setTypePray(result.getTypePray());
-        resultDTO.setTypeCcmName(result.getTypeCcmName());
-        resultDTO.setTypeCcmSinger(result.getTypeCcmSinger());
-        resultDTO.setTypeCcmUrl(result.getTypeCcmUrl());
-        resultDTO.setTypeCcmLyric(result.getTypeCcmLyric());
-        resultDTO.setMbtiCount(mbtiCnt);
-        resultDTO.setTypeThumbnailImageUrl(result.getTypeThumbnailImageUrl());
-        resultDTO.setTypeDesc(result.getTypeDesc());
-
-        return resultDTO;
+    @GetMapping(value="/holymbti/searchResult/{issueId}")
+    public MBTIDTO searchResult(@PathVariable("issueId") long issueId){
+        return apiService.searchResult(issueId);
     }
 
     // 다운로드
