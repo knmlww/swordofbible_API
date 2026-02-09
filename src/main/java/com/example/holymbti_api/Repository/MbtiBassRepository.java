@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface MbtiBassRepository extends JpaRepository<MBTI_BASS, Long> {
 
     MBTI_BASS findByTypeName(String typeName);
+
+    MBTI_BASS findByTypeDtlName(String imageName);
 }

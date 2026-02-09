@@ -33,7 +33,7 @@ public class APIService {
         MbtiIssue issue = apiRepository.findById(issueId)
                 .orElseThrow(() -> new RuntimeException("해당 issueId의 결과를 찾을 수 없습니다: " + issueId));
 
-        MBTI_BASS bass = mbtiBassRepository.findByTypeName(issue.getMbtiResult());
+        MBTI_BASS bass = mbtiBassRepository.findByTypeDtlName(issue.getImgName());
 
         int mbtiCount = findMyMBTICount(issue.getMbtiResult());
 
